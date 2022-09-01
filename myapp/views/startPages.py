@@ -24,15 +24,19 @@ def predict_test(request):
     else:
         template = float(request.POST.get('template'))
         boiling_point = float(request.POST.get('boiling-point'))
-        GjfFiles = request.FILES.get('file')
         try:
+            GjfFiles = request.FILES.get('file')
             f = GjfFiles.readlines()
             f = [item.decode() for item in f]
             GjfFiles.close()
             # 调用事先写好的api，得到预测结果
             P_cul = str(cal_Ps(f, boiling_point, template)).replace('[', '').replace(']', '')
+            # P_cul=format(float(P_cul), '.3f')
         except Exception as e:
             print(e)
+            template='error'
+            boiling_point='error'
+            GjfFiles.name='unknown'
             P_cul= 'Gjf可能存在问题，请联系开发人员！'
         data = {
             'template': template,
