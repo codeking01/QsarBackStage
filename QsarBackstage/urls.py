@@ -16,10 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from myapp.views import startPages
+from myapp.views import AllPredModels, deal_pages, Users
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('', startPages.predict_test),
-    path('index/', startPages.predict_test)
+    path('', Users.index),
+    path('saturated_vapor_pressure/', AllPredModels.predict_test),
+    # 牛牛的环糊精模型
+    path('Cyclodextrin_predict/', AllPredModels.cyclodextrin_predict)
 ]
+
+handler404 = deal_pages.page_not_found
+handler500 = deal_pages.server_error

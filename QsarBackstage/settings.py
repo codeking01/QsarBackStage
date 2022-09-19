@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,8 +23,11 @@ SECRET_KEY = 'django-insecure-y04c$pg!&m#i)onmapa!9vhz*&0k&c)r*9g+o*xstlrg2ivw*8
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
-ALLOWED_HOSTS = []
+# 加上 * 为了让所有ip都可以访问
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -36,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 注册app
-    'myapp.apps.MyappConfig'
+    'myapp.apps.MyappConfig',
+    # 'commonapp.apps.CommonappConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +130,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'qsar_static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

@@ -5,6 +5,8 @@ import numpy as np
 import math
 import copy
 
+from myapp.utils.Common.base_dir import base_dir
+
 
 def m_s(n_atom, M_S_A, M_adj):
     M_S = M_S_A.copy()
@@ -347,13 +349,13 @@ def cal_Ps(gjf, Tb, T):
         NIS, ms = ni_s(MSI_gjf)
         X_S = mat(NIS)
         X_M_S = mat(ms)
-        ii_S = np.load('./myapp/utils/SaturatedVaporPressure/ii_left_S.npy')
+        ii_S = np.load(base_dir+'/SaturatedVaporPressure/ii_left_S.npy')
         X_S = X_S[:, ii_S]
         XT_S_d = np.c_[
             copy.deepcopy(X_S), copy.deepcopy(X_S) / X_M_S[:, 1], copy.deepcopy(X_S) / np.sqrt(X_M_S[:, 2]), copy.deepcopy(
                 X_S) / np.sqrt(X_M_S[:, 3]), copy.deepcopy(X_S) / np.sqrt(X_M_S[:, 4]), copy.deepcopy(X_S) / np.sqrt(
                 X_M_S[:, 3] / X_M_S[:, 1])]
-        re_all = np.load('./myapp/utils/SaturatedVaporPressure/result_ad_AB.npz', allow_pickle=True)
+        re_all = np.load(base_dir+'/SaturatedVaporPressure/result_ad_AB.npz', allow_pickle=True)
         ii_all = re_all['ii_all']
         bb_all = re_all['bb_all']
         cy_call = 40

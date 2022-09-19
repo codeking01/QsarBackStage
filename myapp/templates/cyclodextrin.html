@@ -1,0 +1,121 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %} 预测环糊精模型 {% endblock %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">环糊精模型</h3>
+        </div>
+        <div class="panel-body">
+            <form id="form_one" class="form-inline" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <br>
+                <div class="form-group" style="padding-bottom: 10px">
+                    <div class="col-md-20">
+                        <label style="width: 95px;">选择Gjf文件</label>
+                        <input type="file" name="file" id="file-input" accept=".gjf," style="display:inline-block"
+                               required/>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-default">点击预测</button>
+            </form>
+        </div>
+        <br>
+        {% if data %}
+            <div class="panel-body">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>已选择的gjf文件</th>
+                        <th>alpha</th>
+                        <th>beta</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ data.GjfFiles }}</td>
+                        <td>{{ data.alpha_ks }}</td>
+                        <td>{{ data.beta_ks }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+    {#  原文链接：https://blog.csdn.net/xh1506101064/article/details/122238855#}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            //表单提交判断
+            {% comment %}$("#form_one").submit(function () {
+                let flag = true;
+                if (!CheckTemplateValue()) {
+                    flag = false;
+                    alert("温度输入有误，请重新输入！")
+                    $("#template").val('');
+                    $("#checkTemplate").html('')
+                } else if (!checkBoiling_point()) {
+                    flag = false;
+                    alert("沸点输入有误，请重新输入！")
+                    $("#boiling_point").val('')
+                    $("#checkBoilingPoint").html('')
+                }
+                return flag;
+            });{% endcomment %}
+            // 保证上传文件的一些良好体验
+            let cloneFile = {file: {}}
+            let fileInput = document.querySelector('#file-input');
+            // fileInput.onchange = changeFun();
+            $('#file-input').bind("change", changeFun)
+
+            function changeFun(e) {
+                //兼容e事件
+                e = e || window.event
+                let fileElement = e.target
+                {#console.log(fileElement)#}
+                {#let fileName = getFileName(fileElement.value)#}
+                let fileName = fileElement.value
+                // 当文件名为0时，代表用户选择文件之后点击了取消
+                if (fileName.length == 0) {
+                    // 将克隆的文件替换当前空文件
+                    {#console.log(1);#}
+                    {#console.log(cloneFile.file[0].files[0].name);#}
+                    cloneFile.file.insertBefore(fileElement)
+                    $(fileElement).remove()
+                    //替换之后再将次克隆保存，不然第三次点击取消就会报错
+                    cloneFile.file = $(cloneFile.file).clone(true, true)
+                } else {
+                    // 当文件名不为0时，将该对象克隆之后保存到cloneFile里面
+                    cloneFile.file = $(fileElement).clone(true, true)
+                }
+                {#let filereader = new FileReader();#}
+                // 将文件对象克隆给cloneFile
+
+                // cloneFile.file = $(fileElement).detach()
+                {% comment %}let fileType = this.files[0].type;
+                filereader.onload = function () {
+                    if (/^image\[jpeg|png|gif]/.test(fileType)) {
+                        console.log(this.result);
+                    }
+                }{% endcomment %}
+                // console.log(this.files[0]);
+                {#filereader.readAsDataURL(this.files[0]);#}
+            }
+
+            // 读取文件名
+            function getFileName(path) {
+                let idx = path.lastIndexOf("\\")
+                if (idx == -1) {
+                    idx = path.lastIndexOf("/")
+                }
+                return path.substring(idx + 1)
+            }
+            // console.dir(fileInput);
+            {#    原文链接：https://blog.csdn.net/xh1506101064/article/details/122238855#}
+        })
+    </script>
+{% endblock %}
